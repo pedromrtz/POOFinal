@@ -30,7 +30,7 @@ public class MenuDAO implements CRUDInterface<Menu> {
     @Override
     public List<Menu> findAll() {
         List<Menu> menus = new ArrayList<>();
-        String query = "SELECT * FROM MENUS";
+        String query = "SELECT * FROM MENUS WHERE ESTADO = 1";
         try (PreparedStatement stmt = connection.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
@@ -85,4 +85,6 @@ public class MenuDAO implements CRUDInterface<Menu> {
         menu.setEstado(rs.getInt("ESTADO"));
         return menu;
     }
+    
+    
 }

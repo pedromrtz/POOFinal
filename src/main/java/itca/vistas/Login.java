@@ -1,6 +1,7 @@
 package itca.vistas;
 
 import itca.dao.*;
+import java.awt.Color;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -25,6 +26,8 @@ public class Login extends javax.swing.JFrame {
         initializeConnection();
         initializeDAOs();
         customComponents();
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
+
     }
     
      private void initializeDAOs() {
@@ -94,7 +97,7 @@ public class Login extends javax.swing.JFrame {
         BG_Panel.setBackground(new java.awt.Color(255, 255, 255));
         BG_Panel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        BG_Red.setBackground(new java.awt.Color(255, 51, 51));
+        BG_Red.setBackground(new java.awt.Color(255, 50, 50));
         BG_Red.setForeground(new java.awt.Color(255, 255, 255));
 
         labelUser.setFont(new java.awt.Font("Montserrat", 1, 14)); // NOI18N
@@ -111,6 +114,12 @@ public class Login extends javax.swing.JFrame {
         botonEntrar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 botonEntrarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                botonEntrarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                botonEntrarMouseExited(evt);
             }
         });
 
@@ -207,18 +216,26 @@ public class Login extends javax.swing.JFrame {
         String user,password;
         
         user = usuarioInput.getText();
-        password = String.valueOf(passInput.getPassword());
+        char[] passchar = passInput.getPassword();
+        password = new String(passchar);
         
+        
+            
         Usuario respuestaUser = usuarioDAO.findByUser(user);
-        
-        //&& respuestaUser.getClave() == password
-        
-        if(respuestaUser != null){
-            System.out.println(respuestaUser.getClave());  
+               
+        if(respuestaUser == null){
+            new ErrorLogin("Usuario no encontrado").setVisible(true);
+            return;
+        }
+                
+        if(respuestaUser.getClave().equals(password)){
             System.out.println("Tienes Acceso");
+            new mainMenu(respuestaUser).setVisible(true);
+            dispose();
         }else{
             System.out.println("No tienes acceso");
-            System.out.println(user + " - " + password);
+            new ErrorLogin("Contraseña incorrecta").setVisible(true);
+            return;
         }
         
     }//GEN-LAST:event_botonEntrarMouseClicked
@@ -238,6 +255,16 @@ public class Login extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         dispose();
     }//GEN-LAST:event_formWindowClosing
+
+    private void botonEntrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonEntrarMouseEntered
+        botonEntrar.setBackground(new Color(245,245,245));
+        
+    }//GEN-LAST:event_botonEntrarMouseEntered
+
+    private void botonEntrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonEntrarMouseExited
+
+        botonEntrar.setBackground(new Color(255,255,255));
+    }//GEN-LAST:event_botonEntrarMouseExited
 
 
     public static void main(String args[]) {
